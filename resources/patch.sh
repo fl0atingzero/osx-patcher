@@ -301,7 +301,6 @@ Patch_Volume()
 	cp -R "$resources_path"/GeForceGA.plugin "$volume_path"/System/Library/Extensions/
 	cp -R "$resources_path"/GeForceGLDriver.bundle "$volume_path"/System/Library/Extensions/
 	cp -R "$resources_path"/GeForceVADriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/NoSleep.kext "$volume_path"/System/Library/Extensions/
 	cp -R "$resources_path"/NVDAGF100Hal.kext "$volume_path"/System/Library/Extensions/
 	cp -R "$resources_path"/NVDAGK100Hal.kext "$volume_path"/System/Library/Extensions/
 	cp -R "$resources_path"/NVDANV40HalG7xxx.kext "$volume_path"/System/Library/Extensions/
@@ -311,8 +310,16 @@ Patch_Volume()
 	cp -R "$resources_path"/NVSMU.kext "$volume_path"/System/Library/Extensions/
 
 	Output_Off cp -R "$resources_path"/Brightness\ Slider.app "$volume_path"/Applications/Utilities
-	Output_Off cp -R "$resources_path"/NoSleep.app "$volume_path"/Applications/Utilities
-	Output_Off cp -R "$resources_path"/NoSleep.prefPane "$volume_path"/System/Library/PreferencePanes
+
+	if [[ $volume_version_short == "10.8" ]]; then
+		cp -R "$resources_path"/1.3.3/NoSleep.kext "$volume_path"/System/Library/Extensions/
+		Output_Off cp -R "$resources_path"/1.3.3/NoSleep.app "$volume_path"/Applications/Utilities
+		Output_Off cp -R "$resources_path"/1.3.3/NoSleep.prefPane "$volume_path"/System/Library/PreferencePanes
+	else
+		cp -R "$resources_path"/NoSleep.kext "$volume_path"/System/Library/Extensions/
+		Output_Off cp -R "$resources_path"/NoSleep.app "$volume_path"/Applications/Utilities
+		Output_Off cp -R "$resources_path"/NoSleep.prefPane "$volume_path"/System/Library/PreferencePanes
+	fi
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched graphics drivers."${erase_style}
 
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching audio drivers."${erase_style}

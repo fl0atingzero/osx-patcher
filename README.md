@@ -16,8 +16,8 @@ I'd like to the thank the following people, and many others, for their research,
 
 # Supported Macs
 ## iMacs
--   iMac4,1
--   iMac4,2
+-   iMac4,1 (with C2D CPU)
+-   iMac4,2 (with C2D CPU)
 -   iMac5,1
 -   iMac5,2
 ## MacBooks
@@ -30,7 +30,7 @@ I'd like to the thank the following people, and many others, for their research,
 -   MacBookPro2,1
 -   MacBookPro2,2
 ## Mac minis
--   Macmini1,1
+-   Macmini1,1 (with C2D CPU)
 -   Macmini2,1
 ## Mac Pros
 -   MacPro1,1
@@ -47,4 +47,4 @@ sudo ./OS\ X\ Patcher.sh —> runs the script with root permissions
 You might notice two little applications have been installed along with OS X Patcher's other patches. They help solve some issues and should be opened and configured after patching. NoSleep is open source and can be found [here](https://github.com/integralpro/nosleep). Brightness Slider is made by ACT Productions and can be found on the [Mac App Store](http://itunes.apple.com/us/app/brightness-control/id456624497?ls=1&mt=12).
 
 # Graphics acceleration
-Your Mac won't support graphics acceleration with this patcher. This means brightness control and sleep won't work (see above) and applications that rely on your graphics card will perform slower or will simply not work. parrotgeek1 will soon release a patcher with support for graphics acceleration on certain Macs.
+Your Mac won't support graphics acceleration with this patcher. This means brightness control and sleep won't work (on non-ATI cards) (see above) and applications that rely on your graphics card will perform slower or will simply not work. parrotgeek1 will soon release a patcher with support for graphics acceleration on certain Macs.

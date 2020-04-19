@@ -313,13 +313,16 @@ Patch_Installer()
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched platform support check."${erase_style}
 
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching kernel flags."${erase_style}
+	if [[ $installer_version_short == "10.11" ]]; then
+		cp "$resources_path"/patch/com.apple.Boot.plist "$installer_volume_path"/Library/Preferences/SystemConfiguration
+	fi
+
 	sed -i '' 's|<string></string>|<string>kext-dev-mode=1 mbasd=1</string>|' "$installer_volume_path"/Library/Preferences/SystemConfiguration/com.apple.Boot.plist
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched kernel flags."${erase_style}
 
 	if [[ $installer_version_short == "10.11" ]]; then
 		echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching kernel cache."${erase_style}
-		rm "$installer_volume_path"/System/Library/PrelinkedKernels/prelinkedkernel
-		cp "$resources_path"/PrelinkedKernel/10.11/prelinkedkernel "$installer_volume_path"/System/Library/PrelinkedKernels
+		cp "$resources_path"/PrelinkedKernel/10.11/patchedkernel "$installer_volume_path"/System/Library/PrelinkedKernels
 		echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched kernel cache."${erase_style}
 	fi
 
