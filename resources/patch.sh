@@ -331,6 +331,12 @@ Patch_Volume()
 	Output_Off rm "$volume_path"/System/Library/CoreServices/PlatformSupport.plist
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched platform support check."${erase_style}
 
+	if [[ $volume_version_short == "10.11" ]]; then
+		echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching kernel."${erase_style}
+		cp "$resources_path"/Kernels/"$volume_version_short"/kernel "$volume_path"/System/Library/Kernels
+		echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched kernel."${erase_style}
+	fi
+
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching kernel flags."${erase_style}
 	sed -i '' 's|<string></string>|<string>kext-dev-mode=1 mbasd=1</string>|' "$volume_path"/Library/Preferences/SystemConfiguration/com.apple.Boot.plist
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched kernel flags."${erase_style}
