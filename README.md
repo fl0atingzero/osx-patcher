@@ -3,7 +3,7 @@
 # OS X Patcher
 OS X Patcher is a command line tool for running OS X on unsupported Macs
 
-# Contributers
+# Contributors
 I'd like to the thank the following people, and many others, for their research, help, and inspiration.
 - [parrotgeek1](https://forums.macrumors.com/members/1033441/)
 - [TMRJIJ](https://forums.macrumors.com/members/tmrjij.878094/)
