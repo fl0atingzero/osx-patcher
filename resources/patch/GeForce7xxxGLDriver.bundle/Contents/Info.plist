@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>GeForce7xxxGLDriver</string>
 	<key>CFBundleGetInfoString</key>
-	<string>GeForce7xxxGLDriver 7.4.1 270.01.00f10</string>
+	<string>GeForce7xxxGLDriver 1.6.6.25 (18.9.0f08)</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.apple.GeForce7xxxGLDriver</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -17,10 +17,10 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.4.1</string>
+	<string>1.6.6</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>7.0.4</string>
+	<string>6.0.6</string>
 </dict>
 </plist>

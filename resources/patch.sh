@@ -52,12 +52,14 @@ Input_Off()
 {
 	stty -echo
 }
+
 Input_On()
 {
 	stty echo
 }
 
-Output_Off() {
+Output_Off()
+{
 	if [[ $verbose == "1" ]]; then
 		"$@"
 	else
@@ -68,26 +70,32 @@ Output_Off() {
 Check_Environment()
 {
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Checking system environment."${erase_style}
+
 	if [ -d /Install\ *.app ]; then
 		environment="installer"
 	fi
+
 	if [ ! -d /Install\ *.app ]; then
 		environment="system"
 	fi
+
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Checked system environment."${erase_style}
 }
 
 Check_Root()
 {
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Checking for root permissions."${erase_style}
+
 	if [[ $environment == "installer" ]]; then
 		root_check="passed"
 		echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Root permissions check passed."${erase_style}
 	else
+
 		if [[ $(whoami) == "root" && $environment == "system" ]]; then
 			root_check="passed"
 			echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Root permissions check passed."${erase_style}
 		fi
+
 		if [[ ! $(whoami) == "root" && $environment == "system" ]]; then
 			root_check="failed"
 			echo -e $(date "+%b %m %H:%M:%S") ${text_error}"- Root permissions check failed."${erase_style}
@@ -95,20 +103,24 @@ Check_Root()
 			Input_On
 			exit
 		fi
+
 	fi
 }
 
 Check_Resources()
 {
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Checking for resources."${erase_style}
+
 	if [[ -d "$resources_path" ]]; then
 		resources_check="passed"
 		echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Resources check passed."${erase_style}
 	fi
+
 	if [[ ! -d "$resources_path" ]]; then
 		resources_check="failed"
 		echo -e $(date "+%b %m %H:%M:%S") ${text_error}"- Resources check failed."${erase_style}
 		echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/ Run this tool with the required resources."${erase_style}
+
 		Input_On
 		exit
 	fi
@@ -142,6 +154,7 @@ model_list="/     iMac4,1
 	echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/ Input an model option."${erase_style}
 	echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/     1 - Use detected model"${erase_style}
 	echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/     2 - Use manually selected model"${erase_style}
+
 	Input_On
 	read -e -p "$(date "+%b %m %H:%M:%S") / " model_option
 	Input_Off
@@ -155,9 +168,11 @@ model_list="/     iMac4,1
 		echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/ What model would you like to use?"${erase_style}
 		echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/ Input your model."${erase_style}
 		echo -e $(date "+%b %m %H:%M:%S") ${text_message}"$model_list"${erase_style}
+
 		Input_On
 		read -e -p "$(date "+%b %m %H:%M:%S") / " model_selected
 		Input_Off
+
 		model="$model_selected"
 		echo -e $(date "+%b %m %H:%M:%S") ${text_success}"+ Using $model_selected as model."${erase_style}
 	fi
@@ -166,53 +181,66 @@ model_list="/     iMac4,1
 Input_Volume()
 {
 	echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/ What volume would you like to use?"${erase_style}
-	echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/ Input a volume name."${erase_style}
-	for volume_path in /Volumes/*; do 
+	echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/ Input a volume number."${erase_style}
+
+	for volume_path in /Volumes/*; do
 		volume_name="${volume_path#/Volumes/}"
+
 		if [[ ! "$volume_name" == com.apple* ]]; then
-			echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/     ${volume_name}"${erase_style} | sort
+			volume_number=$(($volume_number + 1))
+			declare volume_$volume_number="$volume_name"
+
+			echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/     ${volume_number} - ${volume_name}"${erase_style} | sort
 		fi
+
 	done
+
 	Input_On
-	read -e -p "$(date "+%b %m %H:%M:%S") / " volume_name
+	read -e -p "$(date "+%b %m %H:%M:%S") / " volume_number
 	Input_Off
 
+	volume="volume_$volume_number"
+	volume_name="${!volume}"
 	volume_path="/Volumes/$volume_name"
 }
 
 Check_Volume_Version()
 {
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Checking system version."${erase_style}
-	volume_version="$(defaults read "$volume_path"/System/Library/CoreServices/SystemVersion.plist ProductVersion)"
-	volume_version_short="$(defaults read "$volume_path"/System/Library/CoreServices/SystemVersion.plist ProductVersion | cut -c-5)"
+		
+		volume_version="$(defaults read "$volume_path"/System/Library/CoreServices/SystemVersion.plist ProductVersion)"
+		volume_version_short="$(defaults read "$volume_path"/System/Library/CoreServices/SystemVersion.plist ProductVersion | cut -c-5)"
+		
+		volume_build="$(defaults read "$volume_path"/System/Library/CoreServices/SystemVersion.plist ProductBuildVersion)"
 	
-	volume_build="$(defaults read "$volume_path"/System/Library/CoreServices/SystemVersion.plist ProductBuildVersion)"
-
-	if [[ ${#volume_version} == "6" ]]; then
-		volume_version_short="$(defaults read "$volume_path"/System/Library/CoreServices/SystemVersion.plist ProductVersion | cut -c-4)"
-	fi
-
-	if [[ $environment == "installer" ]]; then
-		system_volume_version="$(defaults read /System/Library/CoreServices/SystemVersion.plist ProductVersion)"
-		system_volume_version_short="$(defaults read /System/Library/CoreServices/SystemVersion.plist ProductVersion | cut -c-5)"
-	
-		system_volume_build="$(defaults read /System/Library/CoreServices/SystemVersion.plist ProductBuildVersion)"
-
 		if [[ ${#volume_version} == "6" ]]; then
-			system_volume_version_short="$(defaults read /System/Library/CoreServices/SystemVersion.plist ProductVersion | cut -c-4)"
+			volume_version_short="$(defaults read "$volume_path"/System/Library/CoreServices/SystemVersion.plist ProductVersion | cut -c-4)"
 		fi
-	fi
+	
+		if [[ $environment == "installer" ]]; then
+			system_volume_version="$(defaults read /System/Library/CoreServices/SystemVersion.plist ProductVersion)"
+			system_volume_version_short="$(defaults read /System/Library/CoreServices/SystemVersion.plist ProductVersion | cut -c-5)"
+		
+			system_volume_build="$(defaults read /System/Library/CoreServices/SystemVersion.plist ProductBuildVersion)"
+	
+			if [[ ${#volume_version} == "6" ]]; then
+				system_volume_version_short="$(defaults read /System/Library/CoreServices/SystemVersion.plist ProductVersion | cut -c-4)"
+			fi
+		fi
+
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Checked system version."${erase_style}
 }
 
 Check_Volume_Support()
 {
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Checking system support."${erase_style}
+
 	if [[ $volume_version_short == "10."[8-9] || $volume_version_short == "10.1"[0-1] ]]; then
 		echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ System support check passed."${erase_style}
 	else
 		echo -e $(date "+%b %m %H:%M:%S") ${text_error}"- System support check failed."${erase_style}
 		echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/ Run this tool on a supported system."${erase_style}
+
 		Input_On
 		exit
 	fi
@@ -221,130 +249,146 @@ Check_Volume_Support()
 Patch_Volume()
 {
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching boot.efi."${erase_style}
-	if [[ $volume_version_short == "10."[8-9] || $volume_version_short == "10.10" ]]; then
-		chflags nouchg "$volume_path"/System/Library/CoreServices/boot.efi
-		cp "$resources_path"/EFI/10.8/boot.efi "$volume_path"/System/Library/CoreServices
-		chflags uchg "$volume_path"/System/Library/CoreServices/boot.efi
-	fi
-	
-	if [[ $volume_version_short == "10.11" ]]; then
-		chflags nouchg "$volume_path"/System/Library/CoreServices/boot.efi
-		cp "$resources_path"/EFI/10.11/boot.efi "$volume_path"/System/Library/CoreServices
-		chflags uchg "$volume_path"/System/Library/CoreServices/boot.efi
-	fi
+		
+		if [[ $volume_version_short == "10."[8-9] || $volume_version_short == "10.10" ]]; then
+			chflags nouchg "$volume_path"/System/Library/CoreServices/boot.efi
+			cp "$resources_path"/EFI/10.8/boot.efi "$volume_path"/System/Library/CoreServices
+			chflags uchg "$volume_path"/System/Library/CoreServices/boot.efi
+		fi
+		
+		if [[ $volume_version_short == "10.11" ]]; then
+			chflags nouchg "$volume_path"/System/Library/CoreServices/boot.efi
+			cp "$resources_path"/EFI/10.11/boot.efi "$volume_path"/System/Library/CoreServices
+			chflags uchg "$volume_path"/System/Library/CoreServices/boot.efi
+		fi
+
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched boot.efi."${erase_style}
+
 
 	if [[ $volume_version_short == "10.11" ]]; then
 		echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching input drivers."${erase_style}
-		rm -R "$volume_path"/System/Library/Extensions/IOUSBHostFamily.kext
-		cp -R "$resources_path"/AppleHIDMouse.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/AppleIRController.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/AppleTopCase.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/AppleUSBMultitouch.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/AppleUSBTopCase.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/IOBDStorageFamily.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/IOBluetoothFamily.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/IOBluetoothHIDDriver.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/IOSerialFamily.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/IOUSBFamily.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/IOUSBHostFamily.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/IOUSBMassStorageClass.kext "$volume_path"/System/Library/Extensions/
-		cp -R "$resources_path"/SIPManager.kext "$volume_path"/System/Library/Extensions/
+			
+			rm -R "$volume_path"/System/Library/Extensions/IOUSBHostFamily.kext
+			cp -R "$resources_path"/AppleHIDMouse.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/AppleIRController.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/AppleTopCase.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/AppleUSBMultitouch.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/AppleUSBTopCase.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/IOBDStorageFamily.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/IOBluetoothFamily.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/IOBluetoothHIDDriver.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/IOSerialFamily.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/IOUSBFamily.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/IOUSBHostFamily.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/IOUSBMassStorageClass.kext "$volume_path"/System/Library/Extensions/
+			cp -R "$resources_path"/SIPManager.kext "$volume_path"/System/Library/Extensions/
+		
 		echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched input drivers."${erase_style}
 	fi
 
+
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching graphics drivers."${erase_style}
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD2400Controller.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD2600Controller.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD3800Controller.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD4600Controller.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD4800Controller.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD5000Controller.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD6000Controller.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD7000Controller.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD8000Controller.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD9000Controller.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDFramebuffer.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDMTLBronzeDriver.bundle 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDRadeonVADriver.bundle 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDRadeonX3000.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDRadeonX3000GLDriver.bundle 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDRadeonX4000.kext 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDRadeonX4000GLDriver.bundle 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDShared.bundle 
-	Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDSupport.kext
+		
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD2400Controller.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD2600Controller.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD3800Controller.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD4600Controller.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD4800Controller.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD5000Controller.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD6000Controller.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD7000Controller.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD8000Controller.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMD9000Controller.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDFramebuffer.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDMTLBronzeDriver.bundle 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDRadeonVADriver.bundle 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDRadeonX3000.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDRadeonX3000GLDriver.bundle 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDRadeonX4000.kext 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDRadeonX4000GLDriver.bundle 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDShared.bundle 
+		Output_Off rm -R "$volume_path"/System/Library/Extensions/AMDSupport.kext
+	
+		cp -R "$resources_path"/AppleIntelGMA950.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/AppleIntelGMA950GA.plugin "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/AppleIntelGMA950GLDriver.bundle "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/AppleIntelGMA950VADriver.bundle "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/AppleIntelGMAX3100.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/AppleIntelGMAX3100FB.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/AppleIntelGMAX3100GA.plugin "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/AppleIntelGMAX3100GLDriver.bundle "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/AppleIntelGMAX3100VADriver.bundle "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/AppleIntelIntegratedFramebuffer.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/ATI1300Controller.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/ATI1600Controller.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/ATI1900Controller.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/ATIFramebuffer.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/ATIRadeonX1000.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/ATIRadeonX1000GA.plugin "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/ATIRadeonX1000GLDriver.bundle "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/ATIRadeonX1000VADriver.bundle "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/ATISupport.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/GeForce.kext "$volume_path"/System/Library/Extensions/ions/
+		cp -R "$resources_path"/GeForce7xxxGLDriver.bundle "$volume_path"/System/Library/Extensions/ions/
+		cp -R "$resources_path"/GeForce8xxxGLDriver.bundle "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/GeForceGA.plugin "$volume_path"/System/Library/Extensions//
+		cp -R "$resources_path"/GeForceVADriver.bundle "$volume_path"/System/Library/Extensions//
+		cp -R "$resources_path"/NVDANV40Hal.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/NVDANV50Hal.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/NVDAResman.kext "$volume_path"/System/Library/Extensions/
+	
+		Output_Off cp -R "$resources_path"/Brightness\ Slider.app "$volume_path"/Applications/Utilities
+	
+		if [[ $volume_version_short == "10.8" ]]; then
+			cp -R "$resources_path"/1.3.3/NoSleep.kext "$volume_path"/System/Library/Extensions/
+			Output_Off cp -R "$resources_path"/1.3.3/NoSleep.app "$volume_path"/Applications/Utilities
+			Output_Off cp -R "$resources_path"/1.3.3/NoSleep.prefPane "$volume_path"/System/Library/PreferencePanes
+		else
+			cp -R "$resources_path"/NoSleep.kext "$volume_path"/System/Library/Extensions/
+			Output_Off cp -R "$resources_path"/NoSleep.app "$volume_path"/Applications/Utilities
+			Output_Off cp -R "$resources_path"/NoSleep.prefPane "$volume_path"/System/Library/PreferencePanes
+		fi
 
-	cp -R "$resources_path"/AppleIntelGMA950.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/AppleIntelGMA950GA.plugin "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/AppleIntelGMA950GLDriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/AppleIntelGMA950VADriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/AppleIntelGMAX3100.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/AppleIntelGMAX3100FB.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/AppleIntelGMAX3100GA.plugin "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/AppleIntelGMAX3100GLDriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/AppleIntelGMAX3100VADriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/AppleIntelIntegratedFramebuffer.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/ATI1300Controller.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/ATI1600Controller.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/ATI1900Controller.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/ATIFramebuffer.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/ATIRadeonX1000.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/ATIRadeonX1000GA.plugin "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/ATIRadeonX1000GLDriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/ATIRadeonX1000VADriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/ATISupport.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/GeForce.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/GeForce7xxx.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/GeForce7xxxGA.plugin "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/GeForce7xxxGLDriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/GeForce7xxxVADriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/GeForceGA.plugin "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/GeForceGLDriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/GeForceVADriver.bundle "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/NVDAGF100Hal.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/NVDAGK100Hal.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/NVDANV40HalG7xxx.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/NVDANV50Hal.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/NVDAResman.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/NVDAResmanG7xxx.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/NVSMU.kext "$volume_path"/System/Library/Extensions/
-
-	Output_Off cp -R "$resources_path"/Brightness\ Slider.app "$volume_path"/Applications/Utilities
-
-	if [[ $volume_version_short == "10.8" ]]; then
-		cp -R "$resources_path"/1.3.3/NoSleep.kext "$volume_path"/System/Library/Extensions/
-		Output_Off cp -R "$resources_path"/1.3.3/NoSleep.app "$volume_path"/Applications/Utilities
-		Output_Off cp -R "$resources_path"/1.3.3/NoSleep.prefPane "$volume_path"/System/Library/PreferencePanes
-	else
-		cp -R "$resources_path"/NoSleep.kext "$volume_path"/System/Library/Extensions/
-		Output_Off cp -R "$resources_path"/NoSleep.app "$volume_path"/Applications/Utilities
-		Output_Off cp -R "$resources_path"/NoSleep.prefPane "$volume_path"/System/Library/PreferencePanes
-	fi
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched graphics drivers."${erase_style}
 
+
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching audio drivers."${erase_style}
-	cp -R "$resources_path"/AppleHDA.kext "$volume_path"/System/Library/Extensions/
-	cp -R "$resources_path"/IOAudioFamily.kext "$volume_path"/System/Library/Extensions/
+		
+		cp -R "$resources_path"/AppleHDA.kext "$volume_path"/System/Library/Extensions/
+		cp -R "$resources_path"/IOAudioFamily.kext "$volume_path"/System/Library/Extensions/
+	
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched audio drivers."${erase_style}
 
+
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching platform support check."${erase_style}
-	Output_Off rm "$volume_path"/System/Library/CoreServices/PlatformSupport.plist
+		
+		Output_Off rm "$volume_path"/System/Library/CoreServices/PlatformSupport.plist
+	
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched platform support check."${erase_style}
+
 
 	if [[ $volume_version_short == "10.11" ]]; then
 		echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching kernel."${erase_style}
-		cp "$resources_path"/Kernels/"$volume_version_short"/kernel "$volume_path"/System/Library/Kernels
+			
+			cp "$resources_path"/Kernels/"$volume_version_short"/kernel "$volume_path"/System/Library/Kernels
+		
 		echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched kernel."${erase_style}
 	fi
 
+
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching kernel flags."${erase_style}
-	sed -i '' 's|<string></string>|<string>kext-dev-mode=1 mbasd=1</string>|' "$volume_path"/Library/Preferences/SystemConfiguration/com.apple.Boot.plist
+		
+		sed -i '' 's|<string></string>|<string>kext-dev-mode=1 mbasd=1</string>|' "$volume_path"/Library/Preferences/SystemConfiguration/com.apple.Boot.plist
+	
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched kernel flags."${erase_style}
 
+
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching kernel cache."${erase_style}
-	Output_Off rm "$volume_path"/System/Library/Caches/com.apple.kext.caches/Startup/kernelcache
-	Output_Off rm "$volume_path"/System/Library/PrelinkedKernels/prelinkedkernel
-	Output_Off kextcache -f -u "$volume_path"
+		
+		Output_Off rm "$volume_path"/System/Library/Caches/com.apple.kext.caches/Startup/kernelcache
+		Output_Off rm "$volume_path"/System/Library/PrelinkedKernels/prelinkedkernel
+		Output_Off kextcache -f -u "$volume_path"
+	
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Patched kernel cache."${erase_style}
 }
 
@@ -357,63 +401,58 @@ Repair()
 Repair_Permissions()
 {
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Repairing permissions."${erase_style}
-	if [[ $volume_version_short == "10.11" ]]; then
-		Repair "$volume_path"/System/Library/Extensions/AppleHIDMouse.kext
-		Repair "$volume_path"/System/Library/Extensions/AppleIRController.kext
-		Repair "$volume_path"/System/Library/Extensions/AppleTopCase.kext
-		Repair "$volume_path"/System/Library/Extensions/AppleUSBMultitouch.kext
-		Repair "$volume_path"/System/Library/Extensions/AppleUSBTopCase.kext
-		Repair "$volume_path"/System/Library/Extensions/IOBDStorageFamily.kext
-		Repair "$volume_path"/System/Library/Extensions/IOBluetoothFamily.kext
-		Repair "$volume_path"/System/Library/Extensions/IOBluetoothHIDDriver.kext
-		Repair "$volume_path"/System/Library/Extensions/IOSerialFamily.kext
-		Repair "$volume_path"/System/Library/Extensions/IOUSBFamily.kext
-		Repair "$volume_path"/System/Library/Extensions/IOUSBHostFamily.kext
-		Repair "$volume_path"/System/Library/Extensions/IOUSBMassStorageClass.kext
-		Repair "$volume_path"/System/Library/Extensions/SIPManager.kext
-	fi
-
-	Repair "$volume_path"/System/Library/Extensions/AppleIntelGMA950.kext
-	Repair "$volume_path"/System/Library/Extensions/AppleIntelGMA950GA.plugin
-	Repair "$volume_path"/System/Library/Extensions/AppleIntelGMA950GLDriver.bundle
-	Repair "$volume_path"/System/Library/Extensions/AppleIntelGMA950VADriver.bundle
-	Repair "$volume_path"/System/Library/Extensions/AppleIntelGMAX3100.kext
-	Repair "$volume_path"/System/Library/Extensions/AppleIntelGMAX3100FB.kext
-	Repair "$volume_path"/System/Library/Extensions/AppleIntelGMAX3100GA.plugin
-	Repair "$volume_path"/System/Library/Extensions/AppleIntelGMAX3100GLDriver.bundle
-	Repair "$volume_path"/System/Library/Extensions/AppleIntelGMAX3100VADriver.bundle
-	Repair "$volume_path"/System/Library/Extensions/AppleIntelIntegratedFramebuffer.kext
-	Repair "$volume_path"/System/Library/Extensions/ATI1300Controller.kext
-	Repair "$volume_path"/System/Library/Extensions/ATI1600Controller.kext
-	Repair "$volume_path"/System/Library/Extensions/ATI1900Controller.kext
-	Repair "$volume_path"/System/Library/Extensions/ATIFramebuffer.kext
-	Repair "$volume_path"/System/Library/Extensions/ATIRadeonX1000.kext
-	Repair "$volume_path"/System/Library/Extensions/ATIRadeonX1000GA.plugin
-	Repair "$volume_path"/System/Library/Extensions/ATIRadeonX1000GLDriver.bundle
-	Repair "$volume_path"/System/Library/Extensions/ATIRadeonX1000VADriver.bundle
-	Repair "$volume_path"/System/Library/Extensions/ATISupport.kext
-	Repair "$volume_path"/System/Library/Extensions/GeForce.kext
-	Repair "$volume_path"/System/Library/Extensions/GeForce7xxx.kext
-	Repair "$volume_path"/System/Library/Extensions/GeForce7xxxGA.plugin
-	Repair "$volume_path"/System/Library/Extensions/GeForce7xxxGLDriver.bundle
-	Repair "$volume_path"/System/Library/Extensions/GeForce7xxxVADriver.bundle
-	Repair "$volume_path"/System/Library/Extensions/GeForceGA.plugin
-	Repair "$volume_path"/System/Library/Extensions/GeForceGLDriver.bundle
-	Repair "$volume_path"/System/Library/Extensions/GeForceVADriver.bundle
-	Repair "$volume_path"/System/Library/Extensions/NVDAGF100Hal.kext
-	Repair "$volume_path"/System/Library/Extensions/NVDAGK100Hal.kext
-	Repair "$volume_path"/System/Library/Extensions/NVDANV40HalG7xxx.kext
-	Repair "$volume_path"/System/Library/Extensions/NVDANV50Hal.kext
-	Repair "$volume_path"/System/Library/Extensions/NVDAResman.kext
-	Repair "$volume_path"/System/Library/Extensions/NVDAResmanG7xxx.kext
-	Repair "$volume_path"/System/Library/Extensions/NVSMU.kext
-
-	Repair "$volume_path"/Applications/Utilities/Brightness\ Slider.app
-	Repair "$volume_path"/Applications/Utilities/NoSleep.app
-	Repair "$volume_path"/System/Library/PreferencePanes/NoSleep.prefPane
+		
+		if [[ $volume_version_short == "10.11" ]]; then
+			Repair "$volume_path"/System/Library/Extensions/AppleHIDMouse.kext
+			Repair "$volume_path"/System/Library/Extensions/AppleIRController.kext
+			Repair "$volume_path"/System/Library/Extensions/AppleTopCase.kext
+			Repair "$volume_path"/System/Library/Extensions/AppleUSBMultitouch.kext
+			Repair "$volume_path"/System/Library/Extensions/AppleUSBTopCase.kext
+			Repair "$volume_path"/System/Library/Extensions/IOBDStorageFamily.kext
+			Repair "$volume_path"/System/Library/Extensions/IOBluetoothFamily.kext
+			Repair "$volume_path"/System/Library/Extensions/IOBluetoothHIDDriver.kext
+			Repair "$volume_path"/System/Library/Extensions/IOSerialFamily.kext
+			Repair "$volume_path"/System/Library/Extensions/IOUSBFamily.kext
+			Repair "$volume_path"/System/Library/Extensions/IOUSBHostFamily.kext
+			Repair "$volume_path"/System/Library/Extensions/IOUSBMassStorageClass.kext
+			Repair "$volume_path"/System/Library/Extensions/SIPManager.kext
+		fi
 	
-	Repair "$volume_path"/System/Library/Extensions/AppleHDA.kext
-	Repair "$volume_path"/System/Library/Extensions/IOAudioFamily.kext
+		Repair "$volume_path"/System/Library/Extensions/AppleIntelGMA950.kext
+		Repair "$volume_path"/System/Library/Extensions/AppleIntelGMA950GA.plugin
+		Repair "$volume_path"/System/Library/Extensions/AppleIntelGMA950GLDriver.bundle
+		Repair "$volume_path"/System/Library/Extensions/AppleIntelGMA950VADriver.bundle
+		Repair "$volume_path"/System/Library/Extensions/AppleIntelGMAX3100.kext
+		Repair "$volume_path"/System/Library/Extensions/AppleIntelGMAX3100FB.kext
+		Repair "$volume_path"/System/Library/Extensions/AppleIntelGMAX3100GA.plugin
+		Repair "$volume_path"/System/Library/Extensions/AppleIntelGMAX3100GLDriver.bundle
+		Repair "$volume_path"/System/Library/Extensions/AppleIntelGMAX3100VADriver.bundle
+		Repair "$volume_path"/System/Library/Extensions/AppleIntelIntegratedFramebuffer.kext
+		Repair "$volume_path"/System/Library/Extensions/ATI1300Controller.kext
+		Repair "$volume_path"/System/Library/Extensions/ATI1600Controller.kext
+		Repair "$volume_path"/System/Library/Extensions/ATI1900Controller.kext
+		Repair "$volume_path"/System/Library/Extensions/ATIFramebuffer.kext
+		Repair "$volume_path"/System/Library/Extensions/ATIRadeonX1000.kext
+		Repair "$volume_path"/System/Library/Extensions/ATIRadeonX1000GA.plugin
+		Repair "$volume_path"/System/Library/Extensions/ATIRadeonX1000GLDriver.bundle
+		Repair "$volume_path"/System/Library/Extensions/ATIRadeonX1000VADriver.bundle
+		Repair "$volume_path"/System/Library/Extensions/ATISupport.kext
+		Repair "$volume_path"/System/Library/Extensions/GeForce.kext
+		Repair "$volume_path"/System/Library/Extensions/GeForce7xxxGLDriver.bundle
+		Repair "$volume_path"/System/Library/Extensions/GeForce8xxxGLDriver.bundle
+		Repair "$volume_path"/System/Library/Extensions/GeForceGA.plugin
+		Repair "$volume_path"/System/Library/Extensions/GeForceVADriver.bundle
+		Repair "$volume_path"/System/Library/Extensions/NVDANV40Hal.kext
+		Repair "$volume_path"/System/Library/Extensions/NVDANV50Hal.kext
+		Repair "$volume_path"/System/Library/Extensions/NVDAResman.kext
+	
+		Repair "$volume_path"/Applications/Utilities/Brightness\ Slider.app
+		Repair "$volume_path"/Applications/Utilities/NoSleep.app
+		Repair "$volume_path"/System/Library/PreferencePanes/NoSleep.prefPane
+		
+		Repair "$volume_path"/System/Library/Extensions/AppleHDA.kext
+		Repair "$volume_path"/System/Library/Extensions/IOAudioFamily.kext
+	
 	echo -e $(date "+%b %m %H:%M:%S") ${move_up}${erase_line}${text_success}"+ Repaired permissions."${erase_style}
 }
 
@@ -457,6 +496,7 @@ Patch_Volume_Helpers()
 End()
 {
 	echo -e $(date "+%b %m %H:%M:%S") ${text_message}"/ Thank you for using OS X Patcher."${erase_style}
+	
 	Input_On
 	exit
 }
