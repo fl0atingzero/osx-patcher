@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>NVDANV50Hal</string>
 	<key>CFBundleGetInfoString</key>
-	<string>NVDANV50Hal 7.32.12 295.10.20f01</string>
+	<string>NVDANV50Hal 1.6.6.25 (18.9.0f08)</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.apple.nvidia.nv50hal</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.32.12</string>
+	<string>1.6.6</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>7.3.2</string>
+	<string>6.0.6</string>
 	<key>IOKitPersonalities</key>
 	<dict>
 		<key>NVidiaRM</key>
@@ -32,10 +32,22 @@
 			<string>NVDANV50HAL</string>
 			<key>IOMatchCategory</key>
 			<string>IOService</string>
-			<key>IOPCIClassMatch</key>
-			<string>0x03000000&amp;0xff000000</string>
-			<key>IOPCIMatch</key>
-			<string>0x000010de&amp;0x0000ffff</string>
+			<key>IOPCIPrimaryMatch</key>
+			<string>
+                0x00f010de&amp;0xfff0ffff
+                0x019010de&amp;0xfff0ffff
+                0x040010de&amp;0xfff0ffff
+                0x042010de&amp;0xfff0ffff
+                0x05e010de&amp;0xfff8ffff
+                0x05f010de&amp;0xfff0ffff
+                0x060010de&amp;0xffe0ffff
+                0x062010de&amp;0xffe0ffff
+                0x064010de&amp;0xffe0ffff
+                0x06e010de&amp;0xfff0ffff
+                0x086010de&amp;0xffe0ffff
+                0x0a2010de&amp;0xffa0ffff
+                0x0ca010de&amp;0xffe0ffff
+            </string>
 			<key>IOProbeScore</key>
 			<integer>60000</integer>
 			<key>IOProviderClass</key>
@@ -48,8 +60,6 @@
 	<dict>
 		<key>com.apple.NVDAResman</key>
 		<string>1.2.0</string>
-		<key>com.apple.iokit.IOPCIFamily</key>
-		<string>2.4</string>
 		<key>com.apple.kpi.iokit</key>
 		<string>9.0.0</string>
 		<key>com.apple.kpi.libkern</key>

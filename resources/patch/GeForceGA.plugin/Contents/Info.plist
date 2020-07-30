@@ -7,15 +7,15 @@
 	<key>CFBundleExecutable</key>
 	<string>GeForceGA</string>
 	<key>CFBundleGetInfoString</key>
-	<string>GeForceGA 7.32.12 295.10.20f01</string>
+	<string>GeForceGA 1.6.6.25 (18.9.0f08)</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.apple.GeForceGA</string>
 	<key>CFBundleName</key>
 	<string>NVIDIA GeForce Graphics Driver</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.32.12</string>
+	<string>1.6.6</string>
 	<key>CFBundleVersion</key>
-	<string>7.3.2</string>
+	<string>6.0.6</string>
 	<key>CFPlugInDynamicRegistration</key>
 	<string>NO</string>
 	<key>CFPlugInFactories</key>

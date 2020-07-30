@@ -7,7 +7,7 @@
 	<key>CFBundleExecutable</key>
 	<string>NVDAResman</string>
 	<key>CFBundleGetInfoString</key>
-	<string>NVDAResman 7.32.12 295.10.20f01</string>
+	<string>NVDAResman 1.6.6.25 (18.9.0f08)</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.apple.NVDAResman</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -17,14 +17,14 @@
 	<key>CFBundlePackageType</key>
 	<string>KEXT</string>
 	<key>CFBundleShortVersionString</key>
-	<string>7.32.12</string>
+	<string>1.6.6</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>7.3.2</string>
+	<string>6.0.6</string>
 	<key>IOKitPersonalities</key>
 	<dict>
-		<key>NVRM</key>
+		<key>NVidiaRM</key>
 		<dict>
 			<key>CFBundleIdentifier</key>
 			<string>com.apple.NVDAResman</string>
@@ -34,39 +34,53 @@
 			<string>IOFramebuffer</string>
 			<key>IONameMatch</key>
 			<array>
+				<string>MNCA,GeForce2MX</string>
 				<string>NVDA,NVMac</string>
 			</array>
-			<key>IOParentMatch</key>
-			<dict>
-				<key>IOPropertyMatch</key>
-				<dict>
-					<key>NVCLASS</key>
-					<string>NVDA</string>
-				</dict>
-				<key>IOProviderClass</key>
-				<string>IOPCIDevice</string>
-			</dict>
-			<key>IOProbeScore</key>
-			<integer>60000</integer>
-			<key>IOProviderClass</key>
-			<string>IONDRVDevice</string>
-		</dict>
-		<key>NvNdrvGpu</key>
-		<dict>
-			<key>CFBundleIdentifier</key>
-			<string>com.apple.NVDAResman</string>
-			<key>IOClass</key>
-			<string>NVDAPreset</string>
-			<key>IOMatchCategory</key>
-			<string>IOFramebuffer</string>
-			<key>IOPCIClassMatch</key>
-			<string>0x03000000&amp;0xff000000</string>
-			<key>IOPCIMatch</key>
-			<string>0x000010de&amp;0x0000ffff</string>
 			<key>IOProbeScore</key>
 			<integer>60000</integer>
 			<key>IOProviderClass</key>
 			<string>IOPCIDevice</string>
+		</dict>
+		<key>NVidiaRMPCIMatch</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.NVDAResman</string>
+			<key>IOClass</key>
+			<string>NVDA</string>
+			<key>IOMatchCategory</key>
+			<string>IOFramebuffer</string>
+			<key>IONameMatched</key>
+			<string>NVDA,NVMac</string>
+			<key>IOPCIPrimaryMatch</key>
+			<string>0x011010de&amp;0xfff8ffff 0x017010de&amp;0xfff8ffff 0x017910de 0x018010de&amp;0xfff8ffff 0x018810de 0x018910de 0x020010de&amp;0xfff8ffff 0x025010de&amp;0xfff8ffff 0x028010de&amp;0xfff8ffff 0x030010de&amp;0xfff8ffff 0x031010de&amp;0xfff8ffff 0x031910de 0x034910de 0x05e010de&amp;0xfff8ffff 0x05f010de&amp;0xfff0ffff</string>
+			<key>IOProbeScore</key>
+			<integer>50000</integer>
+			<key>IOPropertyMatch</key>
+			<dict>
+				<key>name</key>
+				<string>display</string>
+			</dict>
+			<key>IOProviderClass</key>
+			<string>IOPCIDevice</string>
+		</dict>
+		<key>NVidiaRMTwinView</key>
+		<dict>
+			<key>CFBundleIdentifier</key>
+			<string>com.apple.NVDAResman</string>
+			<key>IOClass</key>
+			<string>NVDA</string>
+			<key>IOMatchCategory</key>
+			<string>IOFramebuffer</string>
+			<key>IONameMatch</key>
+			<array>
+				<string>MNCA,GeForce2MX</string>
+				<string>NVDA,NVMac</string>
+			</array>
+			<key>IOProbeScore</key>
+			<integer>60000</integer>
+			<key>IOProviderClass</key>
+			<string>IONDRVDevice</string>
 		</dict>
 	</dict>
 	<key>OSBundleCompatibleVersion</key>
