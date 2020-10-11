@@ -1,5 +1,3 @@
-<img src="https://github.com/rmc-team/osx-patcher/raw/master/MacBook.png" width="256">
-
 # OS X Patcher
 OS X Patcher is a command line tool for running OS X on unsupported Macs
 
