@@ -329,7 +329,7 @@ Patch_Volume()
 		cp -R "$resources_path"/ATIRadeonX1000VADriver.bundle "$volume_path"/System/Library/Extensions/
 		cp -R "$resources_path"/ATISupport.kext "$volume_path"/System/Library/Extensions/
 		cp -R "$resources_path"/GeForce.kext "$volume_path"/System/Library/Extensions/ions/
-		cp -R "$resources_path"/GeForce7xxxGLDriver.bundle "$volume_path"/System/Library/Extensions/ions/
+		cp -R "$resources_path"/GeForce7xxxGLDriver.bundle "$volume_path"/System/Library/Extensions/
 		cp -R "$resources_path"/GeForce8xxxGLDriver.bundle "$volume_path"/System/Library/Extensions/
 		cp -R "$resources_path"/GeForceGA.plugin "$volume_path"/System/Library/Extensions//
 		cp -R "$resources_path"/GeForceVADriver.bundle "$volume_path"/System/Library/Extensions//
