@@ -43,9 +43,9 @@ This project has been archived and won't receive future updates or support. For 
 - 10.11 El Capitan
 
 ## Known issues
-### Brightness Control and Sleep
+### Sleep (and Brightness Control)
 
-You might notice two little applications have been installed along with OS X Patcher's other patches. They help solve some issues and should be opened and configured after patching. NoSleep is open source and can be found on GitHub. Brightness Slider is made by ACT Productions and can be found on the Mac App Store. If you have an AMD ATI card, brightness and sleep will work fine.
+You might notice a little application has been installed along with OS X Patcher's other patches. It helps solve an issue with sleep and should be opened and configured after patching: NoSleep is open source and can be found on GitHub. Brightness Control will also not work. You can find apps on the App Store to "solve" this. If you have an AMD ATI card, sleep (and brightness control) will work fine.
 
 Affected devices:
 - All (brightness control and sleep unaffected on AMD ATI cards)
