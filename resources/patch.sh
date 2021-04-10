@@ -246,6 +246,11 @@ Check_Volume_Support()
 	fi
 }
 
+Clean_Volume()
+{
+	Output_Off rm -R "$volume_path"/Applications/Utilities/Brightness\ Slider.app
+}
+
 Patch_Volume()
 {
 	echo -e $(date "+%b %m %H:%M:%S") ${text_progress}"> Patching boot.efi."${erase_style}
@@ -336,9 +341,7 @@ Patch_Volume()
 		cp -R "$resources_path"/NVDANV40Hal.kext "$volume_path"/System/Library/Extensions/
 		cp -R "$resources_path"/NVDANV50Hal.kext "$volume_path"/System/Library/Extensions/
 		cp -R "$resources_path"/NVDAResman.kext "$volume_path"/System/Library/Extensions/
-	
-		Output_Off cp -R "$resources_path"/Brightness\ Slider.app "$volume_path"/Applications/Utilities
-	
+		
 		if [[ $volume_version_short == "10.8" ]]; then
 			cp -R "$resources_path"/1.3.3/NoSleep.kext "$volume_path"/System/Library/Extensions/
 			Output_Off cp -R "$resources_path"/1.3.3/NoSleep.app "$volume_path"/Applications/Utilities
@@ -446,7 +449,6 @@ Repair_Permissions()
 		Repair "$volume_path"/System/Library/Extensions/NVDANV50Hal.kext
 		Repair "$volume_path"/System/Library/Extensions/NVDAResman.kext
 	
-		Repair "$volume_path"/Applications/Utilities/Brightness\ Slider.app
 		Repair "$volume_path"/Applications/Utilities/NoSleep.app
 		Repair "$volume_path"/System/Library/PreferencePanes/NoSleep.prefPane
 		
@@ -512,6 +514,7 @@ Input_Model
 Input_Volume
 Check_Volume_Version
 Check_Volume_Support
+Clean_Volume
 Patch_Volume
 Repair_Permissions
 Patch_Volume_Helpers
