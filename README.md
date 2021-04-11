@@ -1,8 +1,8 @@
 # OS X Patcher
 OS X Patcher is a command line tool for running OS X Mountain Lion, OS X Mavericks, OS X Yosemite, and OS X El Capitan on unsupported Macs
 
-## End of Development
-This project has been archived and won't receive future updates or support. For more information please visit [this page](https://julian-fairfax.github.io/blog/020321/end-of-development).
+## End of Support/Development
+This project has had its issues and discussions disabled and *most likely* won't receive future updates or support. For more information please visit [this page](https://julian-fairfax.github.io/blog/020321/end-of-development).
 
 ## Supported Macs
 
