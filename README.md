@@ -158,3 +158,10 @@ Boot from your installer drive by holding down the option key when booting and s
 Open the Utilities menu and click Terminal. Type restore and hit enter. Make sure to select the model you selected when you last patched. Then select your system drive from the list and copy and paste the number.
 
 Wait 5-10 minutes, then reinstall the OS.
+
+## Social
+### MacRumours Forums
+- [OS X 10.11 El Capitan on Unsupported Macs Thread](https://forums.macrumors.com/threads/os-x-el-capitan-beta-on-unsupported-macs.1889851)
+- [OS X 10.10 Yosemite on Unsupported Macs Thread](https://forums.macrumors.com/threads/os-x-yosemite-on-unsupported-macs-guide.1761432/)
+- [OS X 10.9 Mavericks on Unsupported Macs Thread](https://forums.macrumors.com/threads/guide-installing-10-9-mavericks-on-older-macs-hackerwayne.1593194/)
+- [OS X 10.8 Mountain Lion on Unsupported Macs Thread](https://forums.macrumors.com/threads/guide-success-install-10-8-on-old-unsupported-mac.1325709/)
