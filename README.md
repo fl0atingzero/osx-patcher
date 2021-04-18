@@ -164,4 +164,7 @@ Wait 5-10 minutes, then reinstall the OS.
 - [OS X 10.11 El Capitan on Unsupported Macs Thread](https://forums.macrumors.com/threads/os-x-el-capitan-beta-on-unsupported-macs.1889851)
 - [OS X 10.10 Yosemite on Unsupported Macs Thread](https://forums.macrumors.com/threads/os-x-yosemite-on-unsupported-macs-guide.1761432/)
 - [OS X 10.9 Mavericks on Unsupported Macs Thread](https://forums.macrumors.com/threads/guide-installing-10-9-mavericks-on-older-macs-hackerwayne.1593194/)
-- [OS X 10.8 Mountain Lion on Unsupported Macs Thread](https://forums.macrumors.com/threads/guide-success-install-10-8-on-old-unsupported-mac.1325709/)
+- [OS X 10.8 Mountain Lion on Unsupported Macs Thread](https://forums.macrumors.com/threads/guide-success-install-10-8-on-old-unsupported-mac.1325709/)v
+
+## Docs
+If you want to know how OS X Patcher works, you can check [this doc](https://julian-fairfax.github.io/docs/patching-macos-to-run-on-unsupported-macs.html) I wrote about patching macOS to run on unsupported Macs and [this one](https://julian-fairfax.github.io/docs/patching-macos-to-install-on-unsupported-macs.html) about patching macOS to install on unsupported Macs. You can also review the code yourself and feel free to submit a pull request if you think part of it can be improved.
