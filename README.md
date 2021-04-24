@@ -2,7 +2,7 @@
 OS X Patcher is a command line tool for running OS X Mountain Lion, OS X Mavericks, OS X Yosemite, and OS X El Capitan on unsupported Macs
 
 ## End of Support/Development
-This project has had its issues and discussions disabled and *most likely* won't receive future updates or support. For more information please visit [this page](https://julian-fairfax.github.io/blog/020321/end-of-development).
+This project has had its issues and discussions disabled and *most likely* won't receive future updates or support. For more information please visit [this page](https://julianfairfax.github.io/blog/020321/end-of-development).
 
 ## Supported Macs
 
@@ -167,4 +167,4 @@ Wait 5-10 minutes, then reinstall the OS.
 - [OS X 10.8 Mountain Lion on Unsupported Macs Thread](https://forums.macrumors.com/threads/guide-success-install-10-8-on-old-unsupported-mac.1325709/)v
 
 ## Docs
-If you want to know how OS X Patcher works, you can check [this doc](https://julian-fairfax.github.io/docs/patching-macos-to-run-on-unsupported-macs.html) I wrote about patching macOS to run on unsupported Macs and [this one](https://julian-fairfax.github.io/docs/patching-macos-to-install-on-unsupported-macs.html) about patching macOS to install on unsupported Macs. You can also review the code yourself and feel free to submit a pull request if you think part of it can be improved.
+If you want to know how OS X Patcher works, you can check [this doc](https://julianfairfax.github.io/docs/patching-macos-to-run-on-unsupported-macs.html) I wrote about patching macOS to run on unsupported Macs and [this one](https://julianfairfax.github.io/docs/patching-macos-to-install-on-unsupported-macs.html) about patching macOS to install on unsupported Macs. You can also review the code yourself and feel free to submit a pull request if you think part of it can be improved.
